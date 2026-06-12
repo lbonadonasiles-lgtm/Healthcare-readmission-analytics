@@ -1,0 +1,5 @@
+prior_inpatient_group,encounters,readmit_pct
+0 prior stays,16537,39.9
+1 prior stay,4926,54.7
+2-3 prior stays,2742,66.4
+4+ prior stays,795,81.3

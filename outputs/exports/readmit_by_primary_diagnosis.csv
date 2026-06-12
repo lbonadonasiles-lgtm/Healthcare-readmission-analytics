@@ -1,0 +1,9 @@
+primary_diagnosis,encounters,readmit_pct
+Diabetes,1747,53.6
+Missing,4,50.0
+Respiratory,3680,49.1
+Circulatory,7824,47.9
+Digestive,2329,47.4
+Other,6498,45.1
+Injury,1666,43.6
+Musculoskeletal,1252,39.5
