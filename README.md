@@ -9,7 +9,7 @@ design and querying in **SQL (SQLite)**, and an interactive **Power BI** dashboa
 > patterns to a healthcare-operations audience — not a predictive model. All findings
 > describe **associations, not proven causes.**
 
-![Dashboard overview](outputs/figures/dashboard.png)
+![Dashboard overview](outputs/dashboard.png)
 
 ---
 
