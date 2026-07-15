@@ -30,7 +30,7 @@ and translating the results into business-oriented insights.
 
 ## Dataset
 
-- **Source:** Publicly available hospital readmissions dataset (Kaggle). *(Add link.)*
+- **Source:** Publicly available hospital readmissions dataset (Kaggle).
 - **Size:** 25,000 hospital encounters spanning roughly a ten-year period.
 - **Grain:** one row = one hospital encounter.
 - **Contents:** patient age band, length of stay, prior-utilization counts (inpatient,
