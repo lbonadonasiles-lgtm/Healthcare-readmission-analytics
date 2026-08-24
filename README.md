@@ -85,13 +85,38 @@ data-quality issue. Established the overall readmission baseline (~47%) and firs
 associations.
 
 **2. Database design (`02_database_build.ipynb`).** Transformed the flat file into a
-normalized **star schema** in SQLite. The encounter is the grain; because the dataset
-has no patient identifier, a surrogate `encounter_id` was generated and the schema was
-deliberately modeled around the encounter rather than implying a patient-level
-relationship the data cannot support. The repeating diagnosis columns (`diag_1/2/3`) —
-a first-normal-form violation — were unpivoted into a bridge table, the one genuinely
-normalizing step in the data. Tables were created with explicit DDL, primary keys, and
-enforced foreign keys.
+normalized **star schema** in SQLite: one busy fact table holding a row per visit,
+surrounded by small reference tables for the categories each visit belongs to. The
+motivation isn't textbook completeness — the flat CSV repeats full text (specialty
+names, age ranges) on every one of 25,000 rows, which is both wasteful and a
+correctness risk: nothing stops "InternalMedicine" from being spelled two different
+ways across rows, which would silently split a count in two. Storing each category
+once in its own table and having visits reference it removes that failure mode
+entirely, and it also matches how the analysis questions are actually phrased —
+"readmission by age band" is naturally "group visits by what's in the age table."
+
+```
+              dim_age
+                 |
+dim_specialty ── fact_encounters ── dim_diagnosis
+                       |
+          bridge_encounter_diagnosis
+```
+
+The encounter is the grain; because the dataset has no patient identifier, a
+surrogate `encounter_id` was generated and the schema was deliberately modeled
+around the encounter rather than implying a patient-level relationship the data
+cannot support. Building a "patient" table anyway would have been the more
+conventional-looking choice, but it would have overclaimed what the data can
+actually prove — so it was deliberately left out.
+
+The repeating diagnosis columns (`diag_1/2/3`) — a first-normal-form violation —
+were unpivoted into a bridge table, the one genuinely normalizing step in the data.
+Each visit can carry up to three diagnoses; instead of checking three separate
+columns for every query, the bridge table gives one row per visit per diagnosis, so
+"how many visits had diabetes anywhere in the diagnosis list" is a single simple
+filter instead of three columns stitched together. Tables were created with explicit
+DDL, primary keys, and enforced foreign keys.
 
 | Table                          | Role                                            |
 |--------------------------------|-------------------------------------------------|
